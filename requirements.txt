@@ -1,0 +1,9 @@
+openai
+langchain
+langchain-community
+rich
+python-dotenv
+langchain-openai
+pypdf
+tiktoken
+streamlit

@@ -57,21 +57,33 @@ if query_type == "Query":
 
 
 if st.button("Run"):
+    result = None
+    start = time.time()
     if file is None:
         st.error("Please upload a file.")
     else:
-        # --- UI-ONLY DEMO ---
-        # Display a placeholder message instead of running the AI query.
-        st.info("Button clicked! The backend AI logic is not connected in this version.")
-        
-        result = (
-            "This is a placeholder response for the summary. "
-            "In the full version, the AI's summary of the document would appear here."
-        )
+        with st.status("Running...", expanded=True) as status:
+            try:
+                result = run_query(
+                    uploaded_file=file,
+                    summarize=query_type == "Summarize",
+                    user_query=user_query if query_type == "Query" else "",
+                    start_page=start_page,
+                    end_page=end_page,
+                    model_name=model_name,
+                    openai_api_key=OPENAI_API_KEY,
+                    openai_url=OPENAI_URL,
+                    temperature=temperature,
+                )
+                status.update(label="Done!", state="complete", expanded=False)
 
-        # We still display the result container to show where the output will go.
+            except Exception as e:
+                status.update(label="Error", state="error", expanded=False)
+                st.error(f"An error occurred: {e}")
+                result = ""
+
         if result:
             with st.container(border=True):
                 st.header("Result")
                 st.markdown(result)
-                st.info("Time taken: 0.01 seconds (placeholder)", icon="⏱️")
+                st.info(f"Time taken: {time.time() - start:.2f} seconds", icon="⏱️")

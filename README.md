@@ -1,6 +1,6 @@
 # Offline Oracle
 
-An interactive web application to summarize and query PDF documents using locally-run Large Language Models (LLMs). This project is designed for privacy, as all processing happens entirely on your own machine.
+An interactive web application to summarize and query PDF documents using locally-run Large Language Models (LLMs). This project is designed for privacy, as everything happens entirely on your own machine.
 
 ![Application Screenshot](screenshot.png)
 ## Features

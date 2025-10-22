@@ -41,12 +41,18 @@ def get_map_reduce_chain(llm: ChatOpenAI, user_query: str) -> Chain:
     map_prompt = PromptTemplate.from_template(map_template)
     map_prompt = map_prompt.partial(user_query=user_query)
     map_chain = LLMChain(llm=llm, prompt=map_prompt)
-    # Reduce
-    reduce_template = """The following is set of partial answers to a user query:
+    
+    # Reduce (UPDATED)
+    reduce_template = """The following is a set of partial answers to a user query based on different parts of a document:
     {docs}
-    Take these and distill it into a final, consolidated answer to the following query:
-    {user_query} 
-    Complete Answer:"""
+
+    Your task is to synthesize these partial answers into a single, final, consolidated answer to the original query: "{user_query}"
+
+    - If the partial answers contain relevant information, combine them into a comprehensive final answer.
+    - If ALL of the partial answers state that the information is "not relevant", you MUST conclude that the document does not contain the answer. In this case, your final answer should clearly explain that based on the provided document, it is not possible to provide a result for the query. Do not invent an answer.
+
+    Provide only the final, complete answer based on the instructions above.
+    Final Answer:"""
     reduce_prompt = PromptTemplate.from_template(reduce_template)
     reduce_prompt = reduce_prompt.partial(user_query=user_query)
 
